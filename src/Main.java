@@ -34,9 +34,10 @@ public class Main {
             return;
         }
         boolean isCorrect = true;
-        for (int i = 1; i <= 3; ++i) {
-            if (monthlyReports.get(i - 1).getSumOfExpenses() != yearlyReports.get(0).getMonthExpense("0" + i) || monthlyReports.get(i - 1).getSumOfIncomes() != yearlyReports.get(0).getMonthIncome("0" + i)) {
-                System.out.println("В " + i + " месяце обнаружено несоответствие.");
+        for (int i = 1; i <= monthlyReports.size(); ++i) {
+            if (monthlyReports.get(i - 1).getSumOfExpenses() != yearlyReports.get(0).getMonthExpense(i) ||
+                    monthlyReports.get(i - 1).getSumOfIncomes() != yearlyReports.get(0).getMonthIncome(i)) {
+                System.out.println("В " + getMonth(i) + " обнаружено несоответствие.");
                 isCorrect = false;
             }
         }
@@ -49,25 +50,42 @@ public class Main {
         if (!areMonthlyReportsOK(monthlyReports)) {
             return;
         }
-        for (int i = 1; i <= 3; i++) {
-            System.out.print("Самая большая трата за ");
-            if (i == 1) {
-                System.out.print("январь - ");
-                monthlyReports.get(0).printMaxExpense();
-                System.out.print("Самая большая прибыль за январь - ");
-                monthlyReports.get(0).printMaxIncome();
-            } else if (i == 2) {
-                System.out.print("февраль - ");
-                monthlyReports.get(1).printMaxExpense();
-                System.out.print("Самая большая прибыль за февраль - ");
-                monthlyReports.get(1).printMaxIncome();
-            } else {
-                System.out.print("март - ");
-                monthlyReports.get(2).printMaxExpense();
-                System.out.print("Самая большая прибыль за март - ");
-                monthlyReports.get(2).printMaxIncome();
-            }
+        for (int i = 1; i <= monthlyReports.size(); i++) {
+            System.out.print("Самая большая трата за " + getMonth(i) + " - ");
+            monthlyReports.get(i - 1).printMaxExpense();
+            System.out.print("Самая большая прибыль за " + getMonth(i) + " - ");
+            monthlyReports.get(i - 1).printMaxIncome();
         }
+    }
+
+    static String getMonth(int month) {
+        switch (month) {
+            case 1:
+                return "январь";
+            case 2:
+                return "февраль";
+            case 3:
+                return "март";
+            case 4:
+                return "апрель";
+            case 5:
+                return "май";
+            case 6:
+                return "июнь";
+            case 7:
+                return "июль";
+            case 8:
+                return "август";
+            case 9:
+                return "сентябрь";
+            case 10:
+                return "октябрь";
+            case 11:
+                return "ноябрь";
+            case 12:
+                return "декабрь";
+        }
+        return "ОШИБКА";
     }
 
     static boolean areMonthlyReportsOK(ArrayList<MonthlyReport> monthlyReports) {
@@ -83,16 +101,8 @@ public class Main {
             return;
         }
         System.out.println("Информация об отчётах за 2021 год: ");
-        for (int i = 1; i <= 3; i++) {
-            System.out.print("Прибыль за ");
-            if (i == 1) {
-                System.out.print("январь - ");
-            } else if (i == 2) {
-                System.out.print("февраль - ");
-            } else {
-                System.out.print("март - ");
-            }
-            System.out.println(yearlyReports.get(0).getMonthIncome("0" + i) - yearlyReports.get(0).getMonthExpense("0" + i) + ".");
+        for (int i = 1; i <= yearlyReports.get(0).yearlyExpansesAndIncomes.size(); i++) {
+            System.out.println("Прибыль за " + getMonth(i) + " - " + (yearlyReports.get(0).getMonthIncome(i) - yearlyReports.get(0).getMonthExpense(i)) + ".");
         }
         System.out.println("Средний расход за все месяцы в году - " + yearlyReports.get(0).getAverageExpense() + ".");
         System.out.println("Средний доход за все месяцы в году - " + yearlyReports.get(0).getAverageIncome() + ".");
@@ -124,14 +134,14 @@ public class Main {
     static ArrayList<MonthlyReport> getMonthlyReports() {
         ArrayList<MonthlyReport> monthlyReports = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            monthlyReports.add(new MonthlyReport("C:\\Users\\anton\\dev\\java-sprint2-hw\\resources\\m.20210" + i + ".csv"));
+            monthlyReports.add(new MonthlyReport("resources\\m.20210" + i + ".csv"));
         }
         return monthlyReports;
     }
 
     static ArrayList<YearlyReport> getYearlyReport() {
         ArrayList<YearlyReport> yearlyReports = new ArrayList<>();
-        yearlyReports.add(new YearlyReport("C:\\Users\\anton\\dev\\java-sprint2-hw\\resources\\y.2021.csv"));
+        yearlyReports.add(new YearlyReport("resources\\y.2021.csv"));
         return yearlyReports;
     }
 

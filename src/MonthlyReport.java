@@ -14,14 +14,14 @@ public class MonthlyReport {
 
         public Item(String[] parameters) {
             name = parameters[0];
-            isExpense = parameters[1].equals("TRUE");
+            isExpense = Boolean.parseBoolean(parameters[1]);
             quantity = Integer.parseInt(parameters[2]);
             priceOfOne = Integer.parseInt(parameters[3]);
         }
     }
 
     public MonthlyReport(String path) {
-        var lines = readFileContentsOrNull(path);
+        var lines = CSVFileReader.readFileContentsOrNull(path);
         if (lines == null) {
             return;
         }
@@ -47,15 +47,6 @@ public class MonthlyReport {
             }
         }
         return sum;
-    }
-
-    private String[] readFileContentsOrNull(String path) {
-        try {
-            return Files.readString(Path.of(path)).split("\n");
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
-            return null;
-        }
     }
 
     private void parseStringsToItems(String[] lines) {

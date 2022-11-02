@@ -20,21 +20,12 @@ public class YearlyReport {
     }
 
     public YearlyReport(String path) {
-        var lines = readFileContentsOrNull(path);
+        var lines = CSVFileReader.readFileContentsOrNull(path);
         if (lines == null) {
             return;
         }
         parseStringsToHashMap(lines);
         System.out.println("Годовой отчет успешно считан!");
-    }
-
-    private String[] readFileContentsOrNull(String path) {
-        try {
-            return Files.readString(Path.of(path)).split("\n");
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с годовым отчётом. Возможно, файл не находится в нужной директории.");
-            return null;
-        }
     }
 
     private void parseStringsToHashMap(String[] lines) {
@@ -43,7 +34,7 @@ public class YearlyReport {
             if (!yearlyExpansesAndIncomes.containsKey(splittedLine[0])) {
                 yearlyExpansesAndIncomes.put(splittedLine[0], new MonthlyExpenseAndIncome());
             }
-            if (splittedLine[2].equals("true")) {
+            if (Boolean.parseBoolean(splittedLine[2])) {
                 yearlyExpansesAndIncomes.get(splittedLine[0]).setExpense(Integer.parseInt(splittedLine[1]));
             } else {
                 yearlyExpansesAndIncomes.get(splittedLine[0]).setIncome(Integer.parseInt(splittedLine[1]));
@@ -51,12 +42,12 @@ public class YearlyReport {
         }
     }
 
-    public int getMonthExpense(String month) {
-        return yearlyExpansesAndIncomes.get(month).expense;
+    public int getMonthExpense(int month) {
+        return yearlyExpansesAndIncomes.get((month < 10 ? "0" : "") + month).expense;
     }
 
-    public int getMonthIncome(String month) {
-        return yearlyExpansesAndIncomes.get(month).income;
+    public int getMonthIncome(int month) {
+        return yearlyExpansesAndIncomes.get((month < 10 ? "0" : "") + month).income;
     }
 
     public double getAverageExpense() {
