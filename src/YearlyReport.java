@@ -1,10 +1,7 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public class YearlyReport {
-    HashMap<String, MonthlyExpenseAndIncome> yearlyExpansesAndIncomes = new HashMap<>();
+    HashMap<Integer, MonthlyExpenseAndIncome> yearlyExpansesAndIncomes = new HashMap<>();
 
     private class MonthlyExpenseAndIncome {
         public int expense;
@@ -31,23 +28,24 @@ public class YearlyReport {
     private void parseStringsToHashMap(String[] lines) {
         for (int i = 1; i < lines.length; i++) {
             String[] splittedLine = lines[i].split(",");
-            if (!yearlyExpansesAndIncomes.containsKey(splittedLine[0])) {
-                yearlyExpansesAndIncomes.put(splittedLine[0], new MonthlyExpenseAndIncome());
+            Integer currentKey = Integer.parseInt(splittedLine[0]);
+            if (!yearlyExpansesAndIncomes.containsKey(currentKey)) {
+                yearlyExpansesAndIncomes.put(currentKey, new MonthlyExpenseAndIncome());
             }
             if (Boolean.parseBoolean(splittedLine[2])) {
-                yearlyExpansesAndIncomes.get(splittedLine[0]).setExpense(Integer.parseInt(splittedLine[1]));
+                yearlyExpansesAndIncomes.get(currentKey).setExpense(Integer.parseInt(splittedLine[1]));
             } else {
-                yearlyExpansesAndIncomes.get(splittedLine[0]).setIncome(Integer.parseInt(splittedLine[1]));
+                yearlyExpansesAndIncomes.get(currentKey).setIncome(Integer.parseInt(splittedLine[1]));
             }
         }
     }
 
     public int getMonthExpense(int month) {
-        return yearlyExpansesAndIncomes.get((month < 10 ? "0" : "") + month).expense;
+        return yearlyExpansesAndIncomes.get(month).expense;
     }
 
     public int getMonthIncome(int month) {
-        return yearlyExpansesAndIncomes.get((month < 10 ? "0" : "") + month).income;
+        return yearlyExpansesAndIncomes.get(month).income;
     }
 
     public double getAverageExpense() {

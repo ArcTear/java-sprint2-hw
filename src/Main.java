@@ -134,14 +134,15 @@ public class Main {
     static ArrayList<MonthlyReport> getMonthlyReports() {
         ArrayList<MonthlyReport> monthlyReports = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            monthlyReports.add(new MonthlyReport("resources\\m.20210" + i + ".csv"));
+            // ./ тут значит, что мы в текущей директории перемещаемся?
+            monthlyReports.add(new MonthlyReport("./resources/m.20210" + i + ".csv"));
         }
         return monthlyReports;
     }
 
     static ArrayList<YearlyReport> getYearlyReport() {
         ArrayList<YearlyReport> yearlyReports = new ArrayList<>();
-        yearlyReports.add(new YearlyReport("resources\\y.2021.csv"));
+        yearlyReports.add(new YearlyReport("./resources/y.2021.csv"));
         return yearlyReports;
     }
 
